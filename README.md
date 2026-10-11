@@ -3,7 +3,8 @@
 `racket-app-core` is the transport-neutral application contract shared by
 Racket desktop runtimes. It gives native-rendered and WebView-rendered stacks
 one small value model, one canonical byte encoding, one structured-error shape,
-one lifecycle vocabulary, and one compatibility corpus.
+one lifecycle vocabulary, one transport-neutral schema vocabulary, and one
+compatibility corpus.
 
 The package intentionally does **not** own UI controls, transport frames,
 process embedding, HTTP, WebView messaging, or platform policy. Rivet keeps
@@ -40,6 +41,30 @@ on decode, and every implementation enforces the same 64 MiB, depth-64, and
 (make-app-error "invalid-args" "Expected a non-empty title"
                 (hash "field" "title"))
 ```
+
+Schemas describe the application boundary without prescribing its transport:
+
+```racket
+(define Task
+  (schema-record 'Task
+                 (list (schema-field 'id Int64)
+                       (schema-field 'title String))))
+
+(define task-schema
+  (make-app-schema
+   "org.racket.taskboard" 1
+   #:records (list Task)
+   #:commands
+   (list (schema-command 'create-task
+                         (list (schema-parameter 'title String))
+                         (reference-type 'Task)
+                         '("invalid-args")))))
+
+(encode-app-schema task-schema)
+```
+
+Rivet may map a command to an RVT1 RPC while Glaze maps it to a GLZ1 invoke;
+the schema does not own either envelope.
 
 ## Compatibility discipline
 

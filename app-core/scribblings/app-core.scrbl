@@ -6,9 +6,9 @@
 
 @defmodule[app-core]
 
-App Core defines a transport-neutral value codec, structured error shape, and
-lifecycle vocabulary. It deliberately does not define a renderer or protocol
-frame.
+App Core defines a transport-neutral value codec, structured error shape,
+schema vocabulary, and lifecycle vocabulary. It deliberately does not define
+a renderer or protocol frame.
 
 @section{Values}
 
@@ -29,6 +29,31 @@ frame.
                          [data app-value? app-null])
          app-error?]{Constructs a transport-neutral error value.}
 @defproc[(app-error-code? [value any/c]) boolean?]{Recognizes portable kebab-case error tokens.}
+
+@section{Schemas}
+
+A schema describes application messages without selecting their transport.
+Rivet can map a command to an RVT1 RPC while Glaze maps it to a GLZ1 invoke.
+
+@defproc[(make-app-schema [id string?]
+                          [revision exact-nonnegative-integer?]
+                          [#:records records list? null]
+                          [#:enums enums list? null]
+                          [#:commands commands list? null]
+                          [#:events events list? null]
+                          [#:states states list? null])
+         app-schema?]{Validates references, uniqueness, type placement, and names, then returns a canonical schema.}
+@defproc[(schema-type? [value any/c]) boolean?]{Recognizes scalar, list, map, optional, and named-reference type descriptors.}
+@defproc[(app-schema->app-value [schema app-schema?]) app-value?]{Returns the normative introspection value for schema contract 1.}
+@defproc[(encode-app-schema [schema app-schema?]) bytes?]{Canonically encodes the introspection value.}
+
+The scalar descriptors are @racket[Null], @racket[Bool], @racket[Int64],
+@racket[Float64], @racket[String], @racket[Bytes], @racket[Value],
+@racket[Error], and @racket[Unit]. Compound descriptors use
+@racket[list-type], @racket[map-type], @racket[optional-type], and
+@racket[reference-type]. Definitions use @racket[schema-field],
+@racket[schema-record], @racket[schema-enum], @racket[schema-parameter],
+@racket[schema-command], @racket[schema-event], and @racket[schema-state].
 
 @section{Lifecycle}
 

@@ -13,6 +13,10 @@ Before opening a pull request:
    add cross-runtime evidence, and state whether negotiation or a new contract
    version is required.
 
+The `app-schema->app-value` shape is a compatibility surface too. Renaming a
+key, changing declaration-order semantics, or reinterpreting an existing type
+descriptor requires the same written version decision as changing value bytes.
+
 Pull requests should be narrow, include an executable regression test, and
 avoid transport-, renderer-, or product-specific policy. Generated files and
 unrelated formatting changes do not belong in the same commit.

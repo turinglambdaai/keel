@@ -1,6 +1,6 @@
 # App Core Contract v1
 
-This document is normative for the version-1 value and lifecycle contracts.
+This document is normative for the version-1 value, schema, and lifecycle contracts.
 The Racket implementation and `tests/golden-v1.txt` are executable evidence.
 
 ## Scope
@@ -61,6 +61,25 @@ is terminal; restart policy belongs to the embedding runtime.
 For accepted requests, success, failure, cancellation, and timeout are mutually
 exclusive terminal outcomes. Cancellation is an intent that races completion;
 the winner owns the single terminal result, and later attempts are no-ops.
+
+## Schema descriptors
+
+The schema vocabulary is transport-neutral. It describes named records and
+enums plus commands, events, and observable states. A command is the shared
+application concept; a consumer may expose it as an RVT1 RPC, a GLZ1 invoke,
+or another negotiated transport operation.
+
+Types are Null, Bool, Int64, Float64, String, Bytes, Value, Error, Unit,
+List, String-key Map, Optional, and references to named records or enums.
+Unit is valid only as a command result. Every reference must resolve within
+the same schema, and names are unique within their namespace. Record-field,
+command-parameter, and enum-case order is semantic and preserved. Collections
+of named definitions and endpoints are sorted by name for canonical encoding.
+
+`app-schema->app-value` is the normative introspection shape. Its result is an
+ordinary App Core value, and `encode-app-schema` applies the value codec above.
+The top-level `contract` field is `1`; consumers must reject unsupported
+contract numbers rather than guessing.
 
 ## Evolution
 
