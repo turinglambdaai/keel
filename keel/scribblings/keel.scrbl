@@ -1,12 +1,12 @@
 #lang scribble/manual
 
-@(require (for-label racket/base app-core))
+@(require (for-label racket/base keel))
 
-@title{App Core: Neutral Contracts for Racket Desktop Runtimes}
+@title{Keel: Neutral Contracts for Racket Desktop Runtimes}
 
-@defmodule[app-core]
+@defmodule[keel]
 
-App Core defines a transport-neutral value codec, structured error shape,
+Keel defines a transport-neutral value codec, structured error shape,
 schema vocabulary, and lifecycle vocabulary. It deliberately does not define
 a renderer or protocol frame.
 

@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require rackunit
-         "../app-core/main.rkt")
+         "../keel/main.rkt")
 
 (define task-type (reference-type 'Task))
 (define status-type (reference-type "TaskStatus"))

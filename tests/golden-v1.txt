@@ -1,4 +1,4 @@
-# app-core canonical value corpus v1: name|hex
+# keel canonical value corpus v1: name|hex
 null|00
 false|01
 true|02

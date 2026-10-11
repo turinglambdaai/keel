@@ -1,13 +1,13 @@
 # Contributing
 
-App Core is intentionally small. Changes should make independent Racket
+Keel is intentionally small. Changes should make independent Racket
 desktop runtimes more interoperable without coupling their UI or transport
 architectures.
 
 Before opening a pull request:
 
-1. Run `raco test -p racket-app-core` from a linked package installation.
-2. Run `raco setup --doc-index --check-pkg-deps --pkgs racket-app-core`.
+1. Run `raco test -p keel` from a linked package installation.
+2. Run `raco setup --doc-index --check-pkg-deps --pkgs keel`.
 3. Update documentation and rejection tests with behavior changes.
 4. Never edit an existing golden vector silently. Explain compatibility impact,
    add cross-runtime evidence, and state whether negotiation or a new contract

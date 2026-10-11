@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require rackunit
-         "../app-core/main.rkt")
+         "../keel/main.rkt")
 
 (for ([code (in-list '("invalid-args" "timeout" "capability-denied" "e2"))])
   (check-true (app-error-code? code)))

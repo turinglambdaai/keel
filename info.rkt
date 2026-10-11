@@ -1,7 +1,8 @@
 #lang info
 
+(define name "keel")
 (define collection 'multi)
-(define version "0.2")
+(define version "0.3")
 (define pkg-desc "Transport-neutral application contracts for Racket desktop runtimes")
 (define pkg-authors '(turinglambdaai))
 (define license 'MIT)
@@ -10,4 +11,4 @@
 (define build-deps '("racket-doc" "rackunit-lib" "scribble-lib"))
 
 (define scribblings
-  '(("app-core/scribblings/app-core.scrbl" () (library))))
+  '(("keel/scribblings/keel.scrbl" () (library))))

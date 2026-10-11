@@ -6,7 +6,7 @@
          racket/match
          racket/runtime-path
          racket/string
-         "../app-core/main.rkt")
+         "../keel/main.rkt")
 
 (define-runtime-path corpus-path "golden-v1.txt")
 

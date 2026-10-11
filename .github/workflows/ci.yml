@@ -26,8 +26,8 @@ jobs:
           variant: CS
           version: ${{ matrix.racket }}
       - name: Install package
-        run: raco pkg install --auto --no-docs --name racket-app-core --link
+        run: raco pkg install --auto --no-docs --name keel --link
       - name: Test
-        run: raco test -p racket-app-core
+        run: raco test -p keel
       - name: Build documentation
-        run: raco setup --doc-index --check-pkg-deps --pkgs racket-app-core
+        run: raco setup --doc-index --check-pkg-deps --pkgs keel

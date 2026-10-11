@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require rackunit
-         "../app-core/main.rkt")
+         "../keel/main.rkt")
 
 (check-equal? lifecycle-initial-state 'starting)
 (for ([state (in-list lifecycle-states)])

@@ -1,6 +1,6 @@
-# racket-app-core
+# keel
 
-`racket-app-core` is the transport-neutral application contract shared by
+`keel` is the transport-neutral application contract shared by
 Racket desktop runtimes. It gives native-rendered and WebView-rendered stacks
 one small value model, one canonical byte encoding, one structured-error shape,
 one lifecycle vocabulary, one transport-neutral schema vocabulary, and one
@@ -28,7 +28,7 @@ on decode, and every implementation enforces the same 64 MiB, depth-64, and
 ```racket
 #lang racket/base
 
-(require app-core)
+(require keel)
 
 (define payload
   (hash "task" "review"
@@ -77,8 +77,8 @@ versions and error taxonomies.
 ## Development
 
 ```sh
-raco pkg install --auto --name racket-app-core --link
-raco test -p racket-app-core
+raco pkg install --auto --name keel --link
+raco test -p keel
 ```
 
 The package supports Racket 9.0 and newer and is MIT licensed.

@@ -2,7 +2,7 @@
 
 (require rackunit
          racket/list
-         "../app-core/main.rkt")
+         "../keel/main.rkt")
 
 (define generator (make-pseudo-random-generator))
 

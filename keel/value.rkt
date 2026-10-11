@@ -92,14 +92,14 @@
   (define (consume-node!)
     (when (zero? remaining-nodes)
       (raise-arguments-error 'encode-app-value
-                             "value node count exceeds the app-core limit"
+                             "value node count exceeds the keel limit"
                              "maximum nodes" max-value-nodes))
     (set! remaining-nodes (sub1 remaining-nodes)))
 
   (define (consume-bytes! count)
     (when (> count remaining-bytes)
       (raise-arguments-error 'encode-app-value
-                             "encoded value exceeds the app-core size limit"
+                             "encoded value exceeds the keel size limit"
                              "maximum bytes" max-encoded-value-size))
     (set! remaining-bytes (- remaining-bytes count)))
 
@@ -118,7 +118,7 @@
     (define encoded (string->bytes/utf-8 value))
     (when (> (bytes-length encoded) #xffffffff)
       (raise-arguments-error 'encode-app-value
-                             "string exceeds the app-core length field"
+                             "string exceeds the keel length field"
                              "length" (bytes-length encoded)))
     (emit-u32! (bytes-length encoded))
     (emit-bytes! encoded))
@@ -145,7 +145,7 @@
       [(bytes? value)
        (when (> (bytes-length value) #xffffffff)
          (raise-arguments-error 'encode-app-value
-                                "byte string exceeds the app-core length field"
+                                "byte string exceeds the keel length field"
                                 "length" (bytes-length value)))
        (emit-byte! tag:bytes)
        (emit-u32! (bytes-length value))
@@ -153,14 +153,14 @@
       [(or (null? value) (pair? value))
        (when (>= depth max-value-depth)
          (raise-arguments-error 'encode-app-value
-                                "value nesting exceeds the app-core limit"
+                                "value nesting exceeds the keel limit"
                                 "maximum depth" max-value-depth))
        (define count (bounded-list-length value remaining-nodes))
        (unless (exact-nonnegative-integer? count)
          (error 'encode-app-value
                 (case count
                   [(cycle) "value contains a cyclic list"]
-                  [(limit) "value node count exceeds the app-core limit"]
+                  [(limit) "value node count exceeds the keel limit"]
                   [else "value contains an improper list"])))
        (emit-byte! tag:list)
        (emit-u32! count)
@@ -168,12 +168,12 @@
       [(canonical-map? value)
        (when (>= depth max-value-depth)
          (raise-arguments-error 'encode-app-value
-                                "value nesting exceeds the app-core limit"
+                                "value nesting exceeds the keel limit"
                                 "maximum depth" max-value-depth))
        (define keys (sort (hash-keys value) utf8-key<?))
        (when (> (* 2 (length keys)) remaining-nodes)
          (raise-arguments-error 'encode-app-value
-                                "value node count exceeds the app-core limit"
+                                "value node count exceeds the keel limit"
                                 "maximum nodes" max-value-nodes))
        (emit-byte! tag:map)
        (emit-u32! (length keys))
@@ -183,7 +183,7 @@
       [(app-error? value)
        (when (>= depth max-value-depth)
          (raise-arguments-error 'encode-app-value
-                                "value nesting exceeds the app-core limit"
+                                "value nesting exceeds the keel limit"
                                 "maximum depth" max-value-depth))
        (unless (app-error-code? (app-error-code value))
          (raise-argument-error 'encode-app-value
@@ -198,7 +198,7 @@
        (emit (app-error-message value) (add1 depth))
        (emit (app-error-data value) (add1 depth))]
       [else
-       (error 'encode-app-value "value is not in the app-core v1 union")]))
+       (error 'encode-app-value "value is not in the keel v1 union")]))
 
   (emit value 0)
   (get-output-bytes out))
@@ -208,7 +208,7 @@
     (raise-argument-error 'decode-app-value "bytes?" encoded))
   (when (> (bytes-length encoded) max-encoded-value-size)
     (raise-arguments-error 'decode-app-value
-                           "encoded value exceeds the app-core size limit"
+                           "encoded value exceeds the keel size limit"
                            "length" (bytes-length encoded)
                            "maximum" max-encoded-value-size))
   (define in (open-input-bytes encoded))
@@ -217,7 +217,7 @@
   (define (consume-node!)
     (when (zero? remaining-nodes)
       (error 'decode-app-value
-             "value node count exceeds the app-core limit (~a)"
+             "value node count exceeds the keel limit (~a)"
              max-value-nodes))
     (set! remaining-nodes (sub1 remaining-nodes)))
 
@@ -256,12 +256,12 @@
       [(#x06)
        (when (>= depth max-value-depth)
          (error 'decode-app-value
-                "value nesting exceeds the app-core limit (~a)"
+                "value nesting exceeds the keel limit (~a)"
                 max-value-depth))
        (define count (read-u32 "list"))
        (when (> count remaining-nodes)
          (error 'decode-app-value
-                "value node count exceeds the app-core limit (~a)"
+                "value node count exceeds the keel limit (~a)"
                 max-value-nodes))
        (when (> count (- (bytes-length encoded) (file-position in)))
          (error 'decode-app-value "impossible list length: ~a" count))
@@ -275,12 +275,12 @@
       [(#x08)
        (when (>= depth max-value-depth)
          (error 'decode-app-value
-                "value nesting exceeds the app-core limit (~a)"
+                "value nesting exceeds the keel limit (~a)"
                 max-value-depth))
        (define count (read-u32 "map"))
        (when (> count (quotient remaining-nodes 2))
          (error 'decode-app-value
-                "value node count exceeds the app-core limit (~a)"
+                "value node count exceeds the keel limit (~a)"
                 max-value-nodes))
        (define-values (result _)
          (for/fold ([result (hash)] [previous-key-bytes #f])
@@ -298,7 +298,7 @@
       [(#x09)
        (when (>= depth max-value-depth)
          (error 'decode-app-value
-                "value nesting exceeds the app-core limit (~a)"
+                "value nesting exceeds the keel limit (~a)"
                 max-value-depth))
        (define code (read-one (add1 depth)))
        (define message (read-one (add1 depth)))

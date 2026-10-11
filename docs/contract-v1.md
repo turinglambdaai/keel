@@ -1,11 +1,11 @@
-# App Core Contract v1
+# Keel Contract v1
 
 This document is normative for the version-1 value, schema, and lifecycle contracts.
 The Racket implementation and `tests/golden-v1.txt` are executable evidence.
 
 ## Scope
 
-App Core sits above a byte stream and below an application protocol. It owns
+Keel sits above a byte stream and below an application protocol. It owns
 values, errors, lifecycle names, cancellation terminality, canonical encoding,
 and resource limits. It does not own a frame header, request identifier,
 streaming/backpressure mechanism, renderer, permission model, or installer.
@@ -36,10 +36,10 @@ Float64 preserves finite IEEE-754 bits, including the sign of zero. NaN and
 positive/negative infinity are not values in v1 because JSON transports cannot
 round-trip them portably.
 
-Error codes match `[a-z][a-z0-9]*(-[a-z0-9]+)*`. App Core does not define a
+Error codes match `[a-z][a-z0-9]*(-[a-z0-9]+)*`. Keel does not define a
 closed list: RVT1, GLZ1, and future transports each publish and negotiate their
 own taxonomy. Error messages are safe for users and logs; protocols must not
-substitute raw exception text. Error data may be any App Core value.
+substitute raw exception text. Error data may be any Keel value.
 
 ## Budgets and rejection
 
@@ -77,7 +77,7 @@ command-parameter, and enum-case order is semantic and preserved. Collections
 of named definitions and endpoints are sorted by name for canonical encoding.
 
 `app-schema->app-value` is the normative introspection shape. Its result is an
-ordinary App Core value, and `encode-app-schema` applies the value codec above.
+ordinary Keel value, and `encode-app-schema` applies the value codec above.
 The top-level `contract` field is `1`; consumers must reject unsupported
 contract numbers rather than guessing.
 
@@ -86,4 +86,4 @@ contract numbers rather than guessing.
 Existing tags and golden bytes never change within v1. An additive tag still
 requires protocol negotiation because an older decoder must reject it. Any
 change to numeric representation, canonical ordering, budgets, or structured
-error shape requires a new App Core contract version and migration evidence.
+error shape requires a new Keel contract version and migration evidence.

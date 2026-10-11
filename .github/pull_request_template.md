@@ -9,5 +9,5 @@
 - [ ] Regression tests added or updated
 - [ ] Golden corpus impact explained
 - [ ] Documentation updated
-- [ ] `raco test -p racket-app-core` passes
+- [ ] `raco test -p keel` passes
 - [ ] Package dependency check passes

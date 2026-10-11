@@ -2,7 +2,7 @@
 
 (require rackunit
          racket/list
-         "../app-core/main.rkt")
+         "../keel/main.rkt")
 
 ;; Keep numeric bounds local to the test so they are not accidental API.
 (define int64-min (- (expt 2 63)))
