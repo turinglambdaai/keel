@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Racket ${{ matrix.racket }} on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        racket: ["9.0", "9.3"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: Bogdanp/setup-racket@2466913449df77df2bad149d1f2fc4e1ea4795dd # v1.15
+        with:
+          architecture: x64
+          distribution: full
+          variant: CS
+          version: ${{ matrix.racket }}
+      - name: Install package
+        run: raco pkg install --auto --no-docs --name racket-app-core --link
+      - name: Test
+        run: raco test -p racket-app-core
+      - name: Build documentation
+        run: raco setup --doc-index --check-pkg-deps --pkgs racket-app-core
