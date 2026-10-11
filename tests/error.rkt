@@ -14,3 +14,6 @@
 (check-equal? (app-error-code failure) "invalid-args")
 (check-equal? (app-error-message failure) "Expected a String")
 (check-equal? (app-error-data failure) (hash "field" "name"))
+
+(check-exn exn:fail:contract?
+           (lambda () (make-app-error "invalid-args" "message" #\x)))

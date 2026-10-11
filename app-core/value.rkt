@@ -2,10 +2,12 @@
 
 (require racket/list
          racket/math
-         "error.rkt")
+         "error.rkt"
+         (submod "error.rkt" private))
 
 (provide app-null
          app-null?
+         make-app-error
          app-value?
          encode-app-value
          decode-app-value
@@ -38,6 +40,15 @@
 
 (define int64-min (- (expt 2 63)))
 (define int64-max (sub1 (expt 2 63)))
+
+(define (make-app-error code message [data app-null])
+  (unless (app-error-code? code)
+    (raise-argument-error 'make-app-error "app-error-code?" code))
+  (unless (string? message)
+    (raise-argument-error 'make-app-error "string?" message))
+  (unless (app-value? data)
+    (raise-argument-error 'make-app-error "app-value?" data))
+  (make-unchecked-app-error code message data))
 
 (define (finite-inexact-real? value)
   (and (real? value)

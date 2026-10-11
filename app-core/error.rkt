@@ -4,8 +4,7 @@
          app-error-code
          app-error-message
          app-error-data
-         app-error-code?
-         make-app-error)
+         app-error-code?)
 
 ;; Error codes are transport-neutral kebab-case tokens. Each protocol owns its
 ;; closed taxonomy; the shared value layer only guarantees a portable shape.
@@ -18,9 +17,8 @@
   #:transparent
   #:constructor-name make-unchecked-app-error)
 
-(define (make-app-error code message [data (void)])
-  (unless (app-error-code? code)
-    (raise-argument-error 'make-app-error "app-error-code?" code))
-  (unless (string? message)
-    (raise-argument-error 'make-app-error "string?" message))
-  (make-unchecked-app-error code message data))
+;; Only the value layer can validate error data without introducing a module
+;; cycle. Keep the unchecked constructor in a private submodule so users cannot
+;; create a value that fails App Core's own documented invariant.
+(module* private #f
+  (provide make-unchecked-app-error))
