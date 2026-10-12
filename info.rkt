@@ -9,6 +9,3 @@
 
 (define deps '(["base" #:version "9.0"]))
 (define build-deps '("racket-doc" "rackunit-lib" "scribble-lib"))
-
-(define scribblings
-  '(("keel/scribblings/keel.scrbl" () (library))))
