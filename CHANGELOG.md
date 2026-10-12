@@ -4,6 +4,14 @@ All notable changes are recorded here. This project follows Semantic
 Versioning once a public release is tagged; the contract version is governed
 separately by the compatibility rules in `docs/contract-v1.md`.
 
+## 0.3.1 - 2026-10-12
+
+- Make schema names transport identities rather than ASCII source-language
+  identifiers: preserve Racket `?`, `!`, `->`, spaces, and Unicode, with a
+  255-byte UTF-8 bound and rejection of control, format, and surrogate code
+  points. Consumer code generators continue to own collision-checked local
+  identifiers.
+
 ## 0.3.0 - 2026-10-11
 
 - Rename the package and collection to `keel` (was `racket-app-core` /

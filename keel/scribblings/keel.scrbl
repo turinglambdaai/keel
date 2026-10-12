@@ -24,16 +24,47 @@ a renderer or protocol frame.
 
 @section{Structured errors}
 
+@defproc[(app-error? [value any/c]) boolean?]{Recognizes a transport-neutral structured error.}
 @defproc[(make-app-error [code app-error-code?]
                          [message string?]
                          [data app-value? app-null])
          app-error?]{Constructs a transport-neutral error value.}
 @defproc[(app-error-code? [value any/c]) boolean?]{Recognizes portable kebab-case error tokens.}
+@defproc[(app-error-code [error app-error?]) string?]{Returns the error code.}
+@defproc[(app-error-message [error app-error?]) string?]{Returns the human-safe message.}
+@defproc[(app-error-data [error app-error?]) app-value?]{Returns the structured data value.}
 
 @section{Schemas}
 
 A schema describes application messages without selecting their transport.
 Rivet can map a command to an RVT1 RPC while Glaze maps it to a GLZ1 invoke.
+
+@defstruct*[scalar-type ([name symbol?])]
+@defstruct*[list-type ([element schema-type?])]
+@defstruct*[map-type ([value schema-type?])]
+@defstruct*[optional-type ([element schema-type?])]
+@defstruct*[reference-type ([name string?])]
+
+@defthing[Null scalar-type?]
+@defthing[Bool scalar-type?]
+@defthing[Int64 scalar-type?]
+@defthing[Float64 scalar-type?]
+@defthing[String scalar-type?]
+@defthing[Bytes scalar-type?]
+@defthing[Value scalar-type?]
+@defthing[Error scalar-type?]
+@defthing[Unit scalar-type?]
+
+@defstruct*[schema-field ([name string?] [type schema-type?])]
+@defstruct*[schema-record ([name string?] [fields (listof schema-field?)])]
+@defstruct*[schema-enum ([name string?] [cases (listof string?)])]
+@defstruct*[schema-parameter ([name string?] [type schema-type?])]
+@defstruct*[schema-command ([name string?]
+                            [parameters (listof schema-parameter?)]
+                            [result schema-type?]
+                            [error-codes (listof app-error-code?)])]
+@defstruct*[schema-event ([name string?] [type schema-type?])]
+@defstruct*[schema-state ([name string?] [type schema-type?])]
 
 @defproc[(make-app-schema [id string?]
                           [revision exact-nonnegative-integer?]
@@ -43,7 +74,9 @@ Rivet can map a command to an RVT1 RPC while Glaze maps it to a GLZ1 invoke.
                           [#:events events list? null]
                           [#:states states list? null])
          app-schema?]{Validates references, uniqueness, type placement, and names, then returns a canonical schema.}
+@defproc[(app-schema? [value any/c]) boolean?]{Recognizes a validated application schema.}
 @defproc[(schema-type? [value any/c]) boolean?]{Recognizes scalar, list, map, optional, and named-reference type descriptors.}
+@defproc[(schema-name? [value any/c]) boolean?]{Recognizes a non-empty schema identity of at most 255 UTF-8 bytes, excluding control, format, and surrogate code points. Names preserve Racket punctuation and Unicode; consumers map them to collision-checked local identifiers.}
 @defproc[(app-schema->app-value [schema app-schema?]) app-value?]{Returns the normative introspection value for schema contract 1.}
 @defproc[(encode-app-schema [schema app-schema?]) bytes?]{Canonically encodes the introspection value.}
 

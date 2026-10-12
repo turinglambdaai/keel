@@ -64,7 +64,9 @@ Schemas describe the application boundary without prescribing its transport:
 ```
 
 Rivet may map a command to an RVT1 RPC while Glaze maps it to a GLZ1 invoke;
-the schema does not own either envelope.
+the schema does not own either envelope. Schema names preserve ordinary Racket
+conventions such as `ready?`, `save!`, and `string->bytes`, plus Unicode;
+consumer code generators own collision-checked source-language identifiers.
 
 ## Compatibility discipline
 
