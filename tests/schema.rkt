@@ -74,7 +74,13 @@
   (check-true (schema-type? type))
   (check-true (app-value? (schema-type->app-value type))))
 
-(for ([bad-name (in-list '("" "two words" "starts.with.dot" "9starts-with-digit"))])
+(for ([good-name (in-list '("signed-in?" "save!" "string->bytes" "任务状态" "two words"))])
+  (check-true (schema-name? good-name)))
+
+(for ([bad-name (in-list (list ""
+                               "line\nbreak"
+                               (string-append "hidden" (string #\u200b) "format")
+                               (make-string 256 #\a)))])
   (check-false (schema-name? bad-name)))
 
 (check-exn exn:fail:contract? (lambda () (scalar-type 'Unknown)))

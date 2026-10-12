@@ -45,14 +45,27 @@
 ;; Rivet maps command/event/state descriptors to RVT1. Glaze can map the same
 ;; descriptors to GLZ1 without either protocol depending on the other.
 
-(define schema-name-rx #px"^[A-Za-z][A-Za-z0-9_-]*$")
 (define schema-id-rx #px"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 (define max-schema-revision (sub1 (expt 2 63)))
+(define max-schema-name-bytes 255)
+
+(define (safe-schema-name-string? value)
+  ;; Schema names are wire identities, not identifiers in one consumer's
+  ;; implementation language. Preserve normal Racket names (`ready?`,
+  ;; `save!`, `string->bytes`) and Unicode instead of lossy sanitization;
+  ;; native/JS code generators remain responsible for collision-checked local
+  ;; identifiers. Bound the UTF-8 form and reject invisible control/format
+  ;; characters so names stay safe to display and diagnose.
+  (and (positive? (string-length value))
+       (<= (string-utf-8-length value) max-schema-name-bytes)
+       (for/and ([character (in-string value)])
+         (not (memq (char-general-category character) '(cc cf cs))))))
 
 (define (schema-name? value)
   (and (or (string? value) (symbol? value))
-       (regexp-match-exact? schema-name-rx
-                            (if (symbol? value) (symbol->string value) value))
+       (safe-schema-name-string? (if (symbol? value)
+                                     (symbol->string value)
+                                     value))
        #t))
 
 (define (normalize-name who value)

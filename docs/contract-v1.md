@@ -76,6 +76,12 @@ the same schema, and names are unique within their namespace. Record-field,
 command-parameter, and enum-case order is semantic and preserved. Collections
 of named definitions and endpoints are sorted by name for canonical encoding.
 
+Schema names are non-empty Unicode strings whose UTF-8 representation is at
+most 255 bytes. Control, format, and surrogate code points are rejected. A
+name is a transport identity rather than a source-language identifier, so
+Racket conventions such as `ready?`, `save!`, and `string->bytes` remain exact;
+each code generator maps names to collision-checked local identifiers.
+
 `app-schema->app-value` is the normative introspection shape. Its result is an
 ordinary Keel value, and `encode-app-schema` applies the value codec above.
 The top-level `contract` field is `1`; consumers must reject unsupported
