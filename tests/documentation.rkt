@@ -1,0 +1,59 @@
+#lang racket/base
+
+(require rackunit
+         racket/file
+         racket/list
+         racket/path
+         racket/runtime-path
+         racket/string)
+
+(define-runtime-path repository-root/raw "..")
+(define repository-root (simplify-path repository-root/raw #t))
+
+(define (markdown-file? path)
+  (and (file-exists? path)
+       (equal? (path-get-extension path) #".md")))
+
+(define markdown-files
+  (append
+   (filter markdown-file?
+           (directory-list repository-root #:build? #t))
+   (find-files markdown-file? (build-path repository-root "docs"))))
+
+(define markdown-link-pattern #px"\\[[^]]*\\]\\(([^)]+)\\)")
+(define external-link-pattern #px"^(?:https?://|mailto:|#)")
+
+(define (strip-fragment target)
+  (car (string-split target "#" #:trim? #f)))
+
+(for* ([document (in-list markdown-files)]
+       [match (in-list
+               (regexp-match* markdown-link-pattern
+                              (file->string document)
+                              #:match-select values))])
+  (define target (cadr match))
+  (unless (regexp-match? external-link-pattern target)
+    (define local-target (strip-fragment target))
+    (unless (string=? local-target "")
+      (define resolved
+        (simplify-path (build-path (path-only document) local-target) #f))
+      (check-true
+       (or (file-exists? resolved) (directory-exists? resolved))
+       (format "~a links to missing local target ~a"
+               (find-relative-path repository-root document)
+               target)))))
+
+(define family-document-relative "docs/family-architecture.md")
+(define family-document
+  (file->string (build-path repository-root family-document-relative)))
+
+(for ([repository '("Keel" "Rivet" "Glaze" "Permit" "Commerce")])
+  (check-true
+   (string-contains? family-document repository)
+   (format "~a must name ~a" family-document-relative repository)))
+
+(for ([entry '("AGENTS.md" "CONTRIBUTING.md" "README.md")])
+  (check-true
+   (string-contains? (file->string (build-path repository-root entry))
+                     family-document-relative)
+   (format "~a must link the canonical family architecture" entry)))

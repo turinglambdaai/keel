@@ -41,11 +41,11 @@ narrowest relevant tests locally and rely on CI before merging.
 
 ## Family contracts
 
-The canonical four-repository dependency graph, ownership table, change
-routing, and release order live in
-[`CONTRIBUTING.md`](CONTRIBUTING.md#family-operating-model). Read that section
-before changing a boundary shared with Rivet, Glaze, or Permit; do not restate
-its portfolio goals here.
+The canonical five-repository dependency graph, ownership table, change
+routing, release order, and trust boundaries live in
+[`docs/family-architecture.md`](docs/family-architecture.md). Read it before
+changing a boundary shared with Rivet, Glaze, Permit, Commerce, or a product;
+do not restate its portfolio rules here.
 
 Consumers: Rivet and Glaze, each declaring a `keel` `#:version` floor equal
 to the lowest version their suites actually cover. After tagging a release,

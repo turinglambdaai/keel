@@ -4,6 +4,14 @@ All notable changes are recorded here. This project follows Semantic
 Versioning once a public release is tagged; the contract version is governed
 separately by the compatibility rules in `docs/contract-v1.md`.
 
+## Unreleased
+
+- Define the canonical five-repository family architecture, including
+  Commerce's provider/issuance boundary, Permit integration direction,
+  change routing, release sequencing, and independent trust domains.
+- Add a documentation gate for local links, the five repository names, and
+  every Keel maintainer entry point to the canonical architecture.
+
 ## 0.3.1 - 2026-10-12
 
 - Make schema names transport identities rather than ASCII source-language
