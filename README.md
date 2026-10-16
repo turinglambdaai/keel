@@ -11,6 +11,12 @@ process embedding, HTTP, WebView messaging, or platform policy. Rivet keeps
 RVT1 and its WinUI 3 / SwiftUI-AppKit / GTK4 hosts; Glaze keeps GLZ1 and its
 native WebView adapters.
 
+Permit is deliberately outside this dependency chain. Products may compose
+Permit beside Rivet or Glaze for signed commercial rights, but Permit does not
+depend on Keel or either framework. The maintainer-facing dependency graph,
+ownership rules, and release order live in the
+[family operating model](CONTRIBUTING.md#family-operating-model).
+
 ## Contract v1
 
 The value union is:
