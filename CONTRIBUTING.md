@@ -21,6 +21,20 @@ Pull requests should be narrow, include an executable regression test, and
 avoid transport-, renderer-, or product-specific policy. Generated files and
 unrelated formatting changes do not belong in the same commit.
 
+## Releasing
+
+1. Bump the package version in `info.rkt` and add the matching
+   `CHANGELOG.md` section in the same change.
+2. Tag the release with an annotated tag.
+3. Trigger the downstream compatibility suites the same day so contract
+   changes are validated against consumers immediately instead of at their
+   next update:
+
+       gh workflow run family-compat.yml -R turinglambdaai/rivet
+       gh workflow run family-compat.yml -R turinglambdaai/glaze
+
+4. Watch both runs; a red downstream run outranks new work.
+
 By participating, contributors agree to be respectful, technically specific,
 and welcoming. Maintainers may moderate conduct that makes collaboration unsafe
 or hostile.
