@@ -1,5 +1,7 @@
 # keel
 
+**English** · [中文](README.zh-CN.md)
+
 `keel` is the transport-neutral application contract shared by
 Racket desktop runtimes. It gives native-rendered and WebView-rendered stacks
 one small value model, one canonical byte encoding, one structured-error shape,
