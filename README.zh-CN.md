@@ -8,6 +8,12 @@
 
 Permit 与 Commerce 被刻意排除在这条依赖链之外。产品可以在 Rivet 或 Glaze 旁边组合 Permit 以获得签名商业授权，并在需要在线销售编排时加入 Commerce。Permit 不依赖 Keel 或任一框架；Commerce 的无头核心不使用 Keel。权威的五仓库依赖图、所有权规则与发布顺序见[家族架构](docs/family-architecture.md)。
 
+## 使用入口
+
+Keel 适用于运行时共享的传输中立值、规范字节、schema 与结构化错误。大多数产品开发者应从 Rivet 或 Glaze 入手，而不是围绕 Keel 再组装一个应用框架。
+
+[使用选择、成熟度、升级与支持](docs/USING.zh-CN.md) · [English](docs/USING.md)
+
 ## 契约 v1
 
 值的联合类型为：

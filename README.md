@@ -20,6 +20,12 @@ Keel or either framework; Commerce's headless core does not use Keel. The
 canonical five-repository graph, ownership rules, and release order live in the
 [family architecture](docs/family-architecture.md).
 
+## Start here
+
+Use Keel for transport-neutral values, canonical bytes, schemas and structured errors shared by runtimes. Most product developers should start with Rivet or Glaze rather than assemble a second application framework around Keel.
+
+[Fit, maturity, upgrades and support](docs/USING.md) · [简体中文](docs/USING.zh-CN.md)
+
 ## Contract v1
 
 The value union is:
